@@ -2,7 +2,7 @@
   "name": "link-to-define",
   "displayName": "link to define",
   "description": "link to define",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "publisher": "longzi",
   "engines": {
     "vscode": "^1.5.0"
