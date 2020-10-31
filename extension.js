@@ -20,8 +20,8 @@ function getProjectPath(document) {
   const currentFile = (document.uri ? document.uri : document).fsPath;
   let projectPath = null;
 
-  const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(path.join(currentFile)))
-  const workspaceFolderPath = workspaceFolder.uri.fsPath
+  const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(path.join(currentFile)));
+  const workspaceFolderPath = workspaceFolder.uri.fsPath;
   console.log('%c zjs workspaceFolderPath:', 'color: #0e93e0;background: #aaefe5;', workspaceFolderPath);
 
   // 获取出来的路径是反斜杠的 这里转换一下
@@ -41,50 +41,40 @@ function getProjectPath(document) {
  * @param {*} token
  */
 async function provideDefinition(document, position) {
-  console.log('====== 进入 provideDefinition 方法 ======');
+  console.log('进入 provideDefinition');
   const { fileName } = document;
-  const workDir = path.dirname(fileName);
   const word = document.getText(document.getWordRangeAtPosition(position));
   const line = document.lineAt(position);
   const projectPath = getProjectPath(document);
   console.log('%c zjs projectPath:', 'color: #0e93e0;background: #aaefe5;', projectPath);
 
   console.log(`fileName: ${fileName}`); // 当前文件完整路径
-  console.log(`workDir: ${workDir}`); // 当前文件所在目录
   console.log(`当前光标所在单词: ${word}`); // 当前光标所在单词
   console.log(`当前光标所在行: ${line.text}`); // 当前光标所在行
   // 只处理js文件
   if (/\.(js|jsx|ts|tsx)$/.test(fileName)) {
-    console.log(word, line.text);
     const json = document.getText();
     // ajax('')
     const reg = new RegExp(`ajax\\(\\s*('|")${word.replace(/\//g, '\\/')}('|"),?`, 'gm');
-    console.log('reg.test(json):', reg.test(json));
     // yield call(ajax, 'deptRankList',
     const reg2 = new RegExp(`yield call\\(ajax\\, ?('|")${word.replace(/\//g, '\\/')}('|"), ?`, 'gm');
-    console.log('%czjs reg2:', 'color: #cc93e0;background: #bbefe5;', reg2)
-    console.log('%czjs reg2.test(json):', 'color: #cc93e0;background: #bbefe5;', reg2.test(json))
     if (reg.test(json) || reg2.test(json)) {
       // webapp项目
       const destPath1 = `${projectPath}/src/config/api.js`;
-      console.log('%czjs destPath1:', 'color: #cc93e0;background: #bbefe5;', destPath1)
       // 小程序项目
       const destPath2 = `${projectPath}/config/api-config.js`;
-      console.log('%czjs destPath2:', 'color: #cc93e0;background: #bbefe5;', destPath2)
-      let destPath = ''
+      let destPath = '';
       if (fs.existsSync(destPath1)) {
-        destPath = destPath1
+        destPath = destPath1;
       } else if (fs.existsSync(destPath2)) {
-        destPath = destPath2
+        destPath = destPath2;
       }
-      console.log('%c zjs destPath:', 'color: #0e93e0;background: #aaefe5;', destPath);
       if (fs.existsSync(destPath)) {
         let lineNum = 0;
         try {
           const res = await getStuff(destPath, { encoding: 'utf-8' });
           const lines = res.toString().split('\n');
-          console.log(`${path} ${lines.length}`);
-          lineNum = lines.findIndex((item) => item.indexOf(word) > -1);
+          lineNum = lines.findIndex(item => item.indexOf(word) > -1);
           return new vscode.Location(vscode.Uri.file(destPath), new vscode.Position(lineNum, 0));
         } catch (error) {
           vscode.window.showErrorMessage('%c zjs error:', 'color: #0e93e0;background: #aaefe5;', JSON.stringify(error));
@@ -98,19 +88,22 @@ async function provideDefinition(document, position) {
  * 插件被激活时触发，所有代码总入口
  * @param {*} context 插件上下文
  */
-exports.activate = function (context) {
+exports.activate = function(context) {
   console.log('%c zjs context:', 'color: #0e93e0;background: #aaefe5;', 123);
   // 注册如何实现跳转到定义，第一个参数表示仅对json文件生效
   context.subscriptions.push(
-    vscode.languages.registerDefinitionProvider({ pattern: '**/*.{ts,js,jsx,tsx}' }, {
-      provideDefinition,
-    })
+    vscode.languages.registerDefinitionProvider(
+      { pattern: '**/*.{ts,js,jsx,tsx}' },
+      {
+        provideDefinition
+      }
+    )
   );
 };
 
 /**
  * 插件被释放时触发
  */
-exports.deactivate = function () {
+exports.deactivate = function() {
   console.log('您的扩展“vscode-plugin-demo”已被释放！');
 };
