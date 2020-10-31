@@ -51,20 +51,33 @@ async function provideDefinition(document, position) {
 
   console.log(`fileName: ${fileName}`); // 当前文件完整路径
   console.log(`workDir: ${workDir}`); // 当前文件所在目录
-  console.log(`word: ${word}`); // 当前光标所在单词
-  console.log(`line: ${line.text}`); // 当前光标所在行
+  console.log(`当前光标所在单词: ${word}`); // 当前光标所在单词
+  console.log(`当前光标所在行: ${line.text}`); // 当前光标所在行
   // 只处理js文件
   if (/\.(js|jsx|ts|tsx)$/.test(fileName)) {
     console.log(word, line.text);
     const json = document.getText();
     // ajax('')
     const reg = new RegExp(`ajax\\(\\s*('|")${word.replace(/\//g, '\\/')}('|"),?`, 'gm');
+    console.log('reg.test(json):', reg.test(json));
     // yield call(ajax, 'deptRankList',
     const reg2 = new RegExp(`yield call\\(ajax\\, ?('|")${word.replace(/\//g, '\\/')}('|"), ?`, 'gm');
+    console.log('%czjs reg2:', 'color: #cc93e0;background: #bbefe5;', reg2)
+    console.log('%czjs reg2.test(json):', 'color: #cc93e0;background: #bbefe5;', reg2.test(json))
     if (reg.test(json) || reg2.test(json)) {
-      const destPath = `${projectPath}/src/config/api.js`;
+      // webapp项目
+      const destPath1 = `${projectPath}/src/config/api.js`;
+      console.log('%czjs destPath1:', 'color: #cc93e0;background: #bbefe5;', destPath1)
+      // 小程序项目
+      const destPath2 = `${projectPath}/config/api-config.js`;
+      console.log('%czjs destPath2:', 'color: #cc93e0;background: #bbefe5;', destPath2)
+      let destPath = ''
+      if (fs.existsSync(destPath1)) {
+        destPath = destPath1
+      } else if (fs.existsSync(destPath2)) {
+        destPath = destPath2
+      }
       console.log('%c zjs destPath:', 'color: #0e93e0;background: #aaefe5;', destPath);
-
       if (fs.existsSync(destPath)) {
         let lineNum = 0;
         try {
