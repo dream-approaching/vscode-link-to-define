@@ -13,6 +13,7 @@
   "activationEvents": [
     "*"
   ],
+  "icon": "image/icon.png",
   "main": "./extension",
   "contributes": {},
   "scripts": {
