@@ -20,26 +20,15 @@ function getProjectPath(document) {
   const currentFile = (document.uri ? document.uri : document).fsPath;
   let projectPath = null;
 
-  let workspaceFolders = vscode.workspace.workspaceFolders.map((item) => item.uri.path);
-  // 由于存在Multi-root工作区，暂时没有特别好的判断方法，先这样粗暴判断
-  // 如果发现只有一个根文件夹，读取其子文件夹作为 workspaceFolders
-  if (workspaceFolders.length == 1 && workspaceFolders[0] === vscode.workspace.rootPath) {
-    const rootPath = workspaceFolders[0];
-    const files = fs.readdirSync(rootPath);
-    workspaceFolders = files.filter((name) => !/^\./g.test(name)).map((name) => path.resolve(rootPath, name));
-    // vscode.workspace.rootPath会不准确，且已过时
-    // return vscode.workspace.rootPath + '/' + this._getProjectName(vscode, document);
-  }
+  const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(path.join(currentFile)))
+  const workspaceFolderPath = workspaceFolder.uri.fsPath
+  console.log('%c zjs workspaceFolderPath:', 'color: #0e93e0;background: #aaefe5;', workspaceFolderPath);
+
   // 获取出来的路径是反斜杠的 这里转换一下
   const regex = /\\/gi;
-  const currentFilePath = currentFile.replace(regex, '/')
-  workspaceFolders.forEach((folder) => {
-    if (currentFilePath.replace(regex, '/').indexOf(folder.slice(1)) === 0) {
-      projectPath = folder.slice(1);
-    }
-  });
+  projectPath = workspaceFolderPath;
   if (!projectPath) {
-    vscode.window.showErrorMessage('获取工程根路径异常！');
+    console.log('获取工程根路径异常！');
     return '';
   }
   return projectPath;
