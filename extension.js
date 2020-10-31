@@ -54,7 +54,7 @@ async function provideDefinition(document, position) {
   console.log(`word: ${word}`); // 当前光标所在单词
   console.log(`line: ${line.text}`); // 当前光标所在行
   // 只处理js文件
-  if (/\.js$/.test(fileName)) {
+  if (/\.(js|jsx|ts|tsx)$/.test(fileName)) {
     console.log(word, line.text);
     const json = document.getText();
     // ajax('')
@@ -89,7 +89,7 @@ exports.activate = function (context) {
   console.log('%c zjs context:', 'color: #0e93e0;background: #aaefe5;', 123);
   // 注册如何实现跳转到定义，第一个参数表示仅对json文件生效
   context.subscriptions.push(
-    vscode.languages.registerDefinitionProvider(['javascript'], {
+    vscode.languages.registerDefinitionProvider({ pattern: '**/*.{ts,js,jsx,tsx}' }, {
       provideDefinition,
     })
   );
