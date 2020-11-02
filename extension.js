@@ -55,7 +55,7 @@ async function provideDefinition(document, position) {
   if (/\.(js|jsx|ts|tsx)$/.test(fileName)) {
     const json = document.getText();
     // ajax('')
-    const reg = new RegExp(`ajax\\(\\s*('|")${word.replace(/\//g, '\\/')}('|"),?`, 'gm');
+    const reg = new RegExp(`ajax\\(\\s*.*('|")${word.replace(/\//g, '\\/')}('|"),?`, 'gm')
     // yield call(ajax, 'deptRankList',
     const reg2 = new RegExp(`yield call\\(ajax\\, ?('|")${word.replace(/\//g, '\\/')}('|"), ?`, 'gm');
     if (reg.test(json) || reg2.test(json)) {
