@@ -3,6 +3,23 @@
   "displayName": "link to define",
   "description": "link to define",
   "version": "0.1.9",
+  "keywords": [
+    "link",
+    "link-",
+    "link-to",
+    "link-to-",
+    "link-to-define"
+  ],
+  "author": {
+    "email": "longzizheng@gmail.com",
+    "name": "longzi",
+    "url": "https://github.com/dream-approaching"
+  },
+  "bugs": {
+    "email": "longzizheng@gmail.com",
+    "url": "https://github.com/dream-approaching/vscode-link-to-define/issues"
+  },
+  "repository": "https://github.com/dream-approaching/vscode-link-to-define",
   "publisher": "longzi",
   "engines": {
     "vscode": "^1.5.0"
@@ -24,7 +41,9 @@
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
     "eslint": "^3.6.0",
+    "eslint-config-prettier": "^6.15.0",
     "mocha": "^2.3.3",
+    "prettier": "^2.1.2",
     "typescript": "^2.0.3",
     "vscode": "^1.0.0"
   },

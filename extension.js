@@ -1,19 +1,16 @@
-const minappCompDefinition = require('./extends/minapp-definition/extension')
-const apiDefinition = require('./extends/api-definition/extension')
+const minappCompDefinition = require('./extends/minapp-definition/extension');
+const apiDefinition = require('./extends/api-definition/extension');
 
 function activate(context) {
-  console.log('link-define is now active!')
+  console.log('link-to-define is now active!');
 
-  minappCompDefinition.activate(context)
-  apiDefinition.activate(context)
-
+  minappCompDefinition.activate(context);
+  apiDefinition.activate(context);
 }
 
-function deactivate() {
-}
-
+function deactivate() {}
 
 module.exports = {
   activate,
   deactivate,
-}
+};
