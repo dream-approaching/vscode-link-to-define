@@ -1,6 +1,6 @@
 const vscode = require('vscode');
-const wxmlDefinitionProvider = require('../../utils/wxmlDefinitionProvider');
-const jsonDefinitionProvider = require('../../utils/jsonDefinitionProvider');
+const wxmlDefinitionProvider = require('./wxmlDefinitionProvider');
+const jsonDefinitionProvider = require('./jsonDefinitionProvider');
 
 const documentSelector = [{ scheme: 'file', language: 'wxml', pattern: '**/*.wxml' }];
 const documentSelectorJson = [{ scheme: 'file', language: 'json', pattern: '**/*.json' }];

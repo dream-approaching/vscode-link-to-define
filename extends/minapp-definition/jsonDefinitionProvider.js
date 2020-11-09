@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs');
-const findRootPath = require('./findRootPath');
+const findRootPath = require('../../utils/findRootPath');
 
 const provideDefinition = function (document, position) {
   const textLine = document.lineAt(position);
