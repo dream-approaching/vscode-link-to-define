@@ -40,6 +40,6 @@ const wxTags = [
   'official-account',
   'open-data',
   'web-view',
-]
+];
 
-module.exports = wxTags
+module.exports = wxTags;

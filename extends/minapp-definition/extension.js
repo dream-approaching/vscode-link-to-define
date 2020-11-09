@@ -7,10 +7,17 @@ const documentSelectorJson = [{ scheme: 'file', language: 'json', pattern: '**/*
 
 function activate(context) {
   // 注册跳转到定义
-  context.subscriptions.push(vscode.languages.registerDefinitionProvider(documentSelector, wxmlDefinitionProvider));
+  context.subscriptions.push(
+    vscode.languages.registerDefinitionProvider(documentSelector, wxmlDefinitionProvider)
+  );
 
   // 注册json跳转到定义
-  context.subscriptions.push(vscode.languages.registerDefinitionProvider(documentSelectorJson, jsonDefinitionProvider));
+  context.subscriptions.push(
+    vscode.languages.registerDefinitionProvider(
+      documentSelectorJson,
+      jsonDefinitionProvider
+    )
+  );
 }
 
 module.exports = {
