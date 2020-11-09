@@ -403,14 +403,6 @@ end-of-stream@^1.0.0, end-of-stream@^1.1.0:
   dependencies:
     once "^1.4.0"
 
-enhanced-resolve@^5.3.1:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.3.1.tgz#3f988d0d7775bdc2d96ede321dc81f8249492f57"
-  integrity sha512-G1XD3MRGrGfNcf6Hg0LVZG7GIKcYkbfHa5QMxt1HDUTdYoXH0JR1xXyg+MaKLF73E9A27uWNVxvFivNRYeUB6w==
-  dependencies:
-    graceful-fs "^4.2.4"
-    tapable "^2.0.0"
-
 es5-ext@^0.10.14, es5-ext@^0.10.35, es5-ext@^0.10.9, es5-ext@~0.10.14:
   version "0.10.47"
   resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.47.tgz#d24232e1380daad5449a817be19bde9729024a11"
@@ -531,6 +523,7 @@ espree@^3.4.0:
 esprima@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
+  integrity sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==
 
 esquery@^1.0.0:
   version "1.0.1"
@@ -769,11 +762,6 @@ globals@^9.14.0:
 graceful-fs@^4.0.0, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.15"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
-
-graceful-fs@^4.2.4:
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
-  integrity sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
 
 growl@1.10.3:
   version "1.10.3"
@@ -1570,6 +1558,7 @@ source-map-support@^0.5.0:
 source-map@^0.6.0:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+  integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
 split@0.3:
   version "0.3.3"
@@ -1701,11 +1690,6 @@ table@^3.7.8:
     lodash "^4.0.0"
     slice-ansi "0.0.4"
     string-width "^2.0.0"
-
-tapable@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.0.0.tgz#a49c3d6a8a2bb606e7db372b82904c970d537a08"
-  integrity sha512-bjzn0C0RWoffnNdTzNi7rNDhs1Zlwk2tRXgk8EiHKAOX1Mag3d6T0Y5zNa7l9CJ+EoUne/0UHdwS8tMbkh9zDg==
 
 tar@^2.2.1:
   version "2.2.1"
