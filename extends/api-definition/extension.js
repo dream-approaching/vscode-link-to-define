@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const util = require('util');
-const getProjectPath = require('../../utils/getProjectPath');
+const { getProjectPath } = require('../../utils/utils');
 
 const readFile = util.promisify(fs.readFile);
 
@@ -17,9 +17,8 @@ function getStuff(paths, config) {
  * @param {*} token
  */
 async function provideDefinition(document, position) {
-  console.log('进入 provideDefinition');
+  console.log('进入 ajax api provideDefinition');
   const { fileName } = document;
-  name;
   const word = document.getText(document.getWordRangeAtPosition(position));
   const projectPath = getProjectPath(document);
   console.log('%c zjs projectPath:', 'color: #0e93e0;background: #aaefe5;', projectPath);
@@ -28,10 +27,7 @@ async function provideDefinition(document, position) {
   if (/\.(js|jsx|ts|tsx)$/.test(fileName)) {
     const json = document.getText();
     // ajax('')
-    const reg = new RegExp(
-      `ajax\\(\\s*.*('|")${word.replace(/\//g, '\\/')}('|"),?`,
-      'gm'
-    );
+    const reg = new RegExp(`ajax\\(\\s*.*('|")${word.replace(/\//g, '\\/')}('|"),?`, 'gm');
     // yield call(ajax, 'deptRankList',
     const reg2 = new RegExp(
       `yield call\\(ajax\\, ?('|")${word.replace(/\//g, '\\/')}('|"), ?`,
@@ -54,10 +50,7 @@ async function provideDefinition(document, position) {
           const res = await getStuff(destPath, { encoding: 'utf-8' });
           const lines = res.toString().split('\n');
           lineNum = lines.findIndex((item) => item.indexOf(word) > -1);
-          return new vscode.Location(
-            vscode.Uri.file(destPath),
-            new vscode.Position(lineNum, 0)
-          );
+          return new vscode.Location(vscode.Uri.file(destPath), new vscode.Position(lineNum, 0));
         } catch (error) {
           vscode.window.showErrorMessage(
             '%c zjs error:',

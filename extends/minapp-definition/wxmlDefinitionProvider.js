@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-const findComponentPath = require('./findComponentPath');
+const findComponentPath = require('../../utils/findComponentPath');
 const wxTags = require('./wxTags');
 
 const provideDefinition = function (document, position) {
