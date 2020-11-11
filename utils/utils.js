@@ -41,6 +41,10 @@ function isMiniProConfig(fileName) {
   );
 }
 
+function lastArr(arr) {
+  return arr[arr.length - 1];
+}
+
 function getAbsolutePath(document, selectPath, format = 'js') {
   console.log('%c zjs selectPath:', 'color: #0e93e0;background: #aaefe5;', selectPath);
   const rootPath = getProjectPath(document);
@@ -50,7 +54,8 @@ function getAbsolutePath(document, selectPath, format = 'js') {
   console.log('%c zjs baseDir:', 'color: #0e93e0;background: #aaefe5;', baseDir);
   console.log('%c zjs fileName:', 'color: #0e93e0;background: #aaefe5;', fileName);
   // 主要是针对图片做处理，图片传进来是自带格式的
-  const isFileNameHasFormat = selectPath.split('.').length > 1;
+  const selectPathSplitArr = selectPath.split('/');
+  const isFileNameHasFormat = lastArr(selectPathSplitArr).split('.').length > 1;
   const selectPathWithFormat = `${selectPath}${isFileNameHasFormat ? '' : `.${format}`}`;
 
   let absolutePath;

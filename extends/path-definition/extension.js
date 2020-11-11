@@ -11,6 +11,10 @@ const { getAbsolutePath } = require('../../utils/utils');
  */
 async function provideDefinition(document, position) {
   console.log('进入 path provideDefinition');
+  // 如果是import的组件，则不处理
+  const lineText = document.lineAt(position).text;
+  if (lineText.indexOf('import') > -1 && lineText.indexOf('from' > -1)) return;
+
   const range = document.getWordRangeAtPosition(position, /[\w|\-|\.|\#|\s|\/]+\b/);
   if (!range) return;
   const word = document.getText(range);
