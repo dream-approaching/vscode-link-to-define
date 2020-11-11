@@ -32,7 +32,19 @@
   ],
   "icon": "image/icon.png",
   "main": "./extension",
-  "contributes": {},
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Link-To-Define",
+      "properties": {
+        "linkToDefine.requestPrefix": {
+          "type": "string",
+          "default": "ajax",
+          "description": "请求方法名"
+        }
+      }
+    }
+  },
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "node ./node_modules/vscode/bin/test"

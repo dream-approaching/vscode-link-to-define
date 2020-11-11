@@ -26,11 +26,15 @@ async function provideDefinition(document, position) {
   // 只处理js文件
   if (/\.(js|jsx|ts|tsx)$/.test(fileName)) {
     const json = document.getText();
+    const requestPrefix = vscode.workspace.getConfiguration().get('linkToDefine.requestPrefix');
     // ajax('')
-    const reg = new RegExp(`ajax\\(\\s*.*('|")${word.replace(/\//g, '\\/')}('|"),?`, 'gm');
+    const reg = new RegExp(
+      `${requestPrefix}\\(\\s*.*('|")${word.replace(/\//g, '\\/')}('|"),?`,
+      'gm'
+    );
     // yield call(ajax, 'deptRankList',
     const reg2 = new RegExp(
-      `yield call\\(ajax\\, ?('|")${word.replace(/\//g, '\\/')}('|"), ?`,
+      `yield call\\(${requestPrefix}\\, ?('|")${word.replace(/\//g, '\\/')}('|"), ?`,
       'gm'
     );
     if (reg.test(json) || reg2.test(json)) {
