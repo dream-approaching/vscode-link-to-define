@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const fs = require('fs');
+const path = require('path');
 const { getAbsolutePath } = require('../../utils/utils');
 
 /**
@@ -13,7 +14,15 @@ async function provideDefinition(document, position) {
   console.log('进入 path provideDefinition');
   // 如果是import的组件，则不处理
   const lineText = document.lineAt(position).text;
-  if (lineText.indexOf('import') > -1 && lineText.indexOf('from' > -1)) return;
+  const filePath = document.fileName;
+  const fileName = path.basename(filePath);
+  console.log('%c zjs fileName:', 'color: #0e93e0;background: #aaefe5;', fileName);
+  if (
+    lineText.indexOf('import') > -1 &&
+    lineText.indexOf('from' > -1) &&
+    fileName.indexOf('md') === -1
+  )
+    return;
 
   const range = document.getWordRangeAtPosition(position, /[\w|\-|\.|\#|\s|\/]+\b/);
   if (!range) return;
@@ -40,7 +49,7 @@ function activate(context) {
   // 注册如何实现跳转到定义，第一个参数表示仅对json文件生效
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(
-      { pattern: '**/*.{ts,js,jsx,tsx,json,wxml}' },
+      { pattern: '**/*.{ts,js,jsx,tsx,json,wxml,md}' },
       {
         provideDefinition,
       }
