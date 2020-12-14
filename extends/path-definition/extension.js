@@ -31,25 +31,25 @@ async function provideDefinition(document, position) {
   console.log('%c zjs word:', 'color: #0e93e0;background: #aaefe5;', word);
 
   let absolutePath = '';
-  Object.keys(aliasObj).forEach((item) => {
-    // 判断path是否是以alias开头
-    if (word.indexOf(item) === 0) {
-      const [, word1] = word.split(item);
-      const rootStr = '{root}';
-      if (aliasObj[item].indexOf(rootStr) > -1) {
-        const aliasPath = aliasObj[item].replace(rootStr, getProjectPath());
-        // 把 / 替换成 \   因为这里的路径跳转要用 \
-        absolutePath = `${aliasPath}${word1}`.replace(/\//g, '\\/');
-        const stat = fs.statSync(absolutePath);
-        if (stat.isDirectory()) {
-          absolutePath = `${absolutePath}\\index.js`;
-        }
+  const matchAlias = Object.keys(aliasObj).filter((item) => word.indexOf(item) === 0);
+  if (matchAlias.length) {
+    const aliasKey = matchAlias[0];
+    const [, word1] = word.split(aliasKey);
+    const rootStr = '{root}';
+    if (aliasObj[aliasKey].indexOf(rootStr) > -1) {
+      const aliasPath = aliasObj[aliasKey].replace(rootStr, getProjectPath());
+      // 把 / 替换成 \   因为这里的路径跳转要用 \
+      absolutePath = `${aliasPath}${word1}`.replace(/\//g, '\\/');
+      const stat = fs.statSync(absolutePath);
+      if (stat.isDirectory()) {
+        absolutePath = `${absolutePath}\\index.js`;
       }
-    } else {
-      absolutePath = getAbsolutePath(document, word);
     }
-  });
+  } else {
+    absolutePath = getAbsolutePath(document, word);
+  }
 
+  console.log('%c zjs absolutePath:', 'color: #0e93e0;background: #aaefe5;', absolutePath);
   if (fs.existsSync(absolutePath)) {
     try {
       return new vscode.Location(vscode.Uri.file(absolutePath), new vscode.Position(0, 0));

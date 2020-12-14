@@ -46,13 +46,10 @@ function lastArr(arr) {
 }
 
 function getAbsolutePath(document, selectPath, format = 'js') {
-  console.log('%c zjs selectPath:', 'color: #0e93e0;background: #aaefe5;', selectPath);
   const rootPath = getProjectPath(document);
   const filePath = document.fileName;
   const baseDir = path.dirname(filePath);
   const fileName = path.basename(filePath);
-  console.log('%c zjs baseDir:', 'color: #0e93e0;background: #aaefe5;', baseDir);
-  console.log('%c zjs fileName:', 'color: #0e93e0;background: #aaefe5;', fileName);
   // 主要是针对图片做处理，图片传进来是自带格式的
   const selectPathSplitArr = selectPath.split('/');
   const isFileNameHasFormat = lastArr(selectPathSplitArr).split('.').length > 1;

@@ -56,7 +56,8 @@ async function provideDefinition(document, position) {
           lineNum = lines.findIndex((item) => item.indexOf(word) > -1);
           return new vscode.Location(vscode.Uri.file(destPath), new vscode.Position(lineNum, 0));
         } catch (error) {
-          vscode.window.showErrorMessage(JSON.stringify(error));
+          console.log('%c zjs error:', 'color: #0e93e0;background: #aaefe5;', error);
+          // vscode.window.showErrorMessage(JSON.stringify(error));
         }
       }
     }

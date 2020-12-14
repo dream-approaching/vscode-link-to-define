@@ -4,6 +4,17 @@
 
 ### 更新日志
 
+#### [v0.1.15] - 2020-12-14
+
+- 增加对 `import md` 的跳转
+- 支持在 `setting.json` 中配置 `alias`. `{root}`表示根目录
+  ```json
+  "linkToDefine.alias": {
+      "@components": "{root}/src/components",
+      "@config": "{root}/src/config",
+  }
+  ```
+
 #### [v0.1.12] - 2020-11-11
 
 - 修复 import 相对路径跳转失败的问题
