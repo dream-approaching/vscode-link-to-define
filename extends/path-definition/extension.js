@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
-const { getAbsolutePath } = require('../../utils/utils');
+const { getAbsolutePath, getProjectPath } = require('../../utils/utils');
 
 /**
  * 查找文件定义的provider，匹配到了就return一个location，否则不做处理
@@ -20,18 +20,36 @@ async function provideDefinition(document, position) {
   if (
     lineText.indexOf('import') > -1 &&
     lineText.indexOf('from' > -1) &&
-    fileName.indexOf('md') === -1
+    fileName.indexOf('md') === -1 // vscode中md默认不会跳转，需要自己处理
   )
     return;
 
-  const range = document.getWordRangeAtPosition(position, /[\w|\-|\.|\#|\s|\/]+\b/);
+  const range = document.getWordRangeAtPosition(position, /[\w|\-|\.|\#|\s|\/|\@]+\b/);
+  const aliasObj = vscode.workspace.getConfiguration().get('linkToDefine.alias');
   if (!range) return;
   const word = document.getText(range);
   console.log('%c zjs word:', 'color: #0e93e0;background: #aaefe5;', word);
-  const absolutePath = getAbsolutePath(document, word);
-  console.log('%c zjs absolutePath:', 'color: #0e93e0;background: #aaefe5;', absolutePath);
 
-  console.log('fs.existsSync(absolutePath)', fs.existsSync(absolutePath));
+  let absolutePath = '';
+  Object.keys(aliasObj).forEach((item) => {
+    // 判断path是否是以alias开头
+    if (word.indexOf(item) === 0) {
+      const [, word1] = word.split(item);
+      const rootStr = '{root}';
+      if (aliasObj[item].indexOf(rootStr) > -1) {
+        const aliasPath = aliasObj[item].replace(rootStr, getProjectPath());
+        // 把 / 替换成 \   因为这里的路径跳转要用 \
+        absolutePath = `${aliasPath}${word1}`.replace(/\//g, '\\/');
+        const stat = fs.statSync(absolutePath);
+        if (stat.isDirectory()) {
+          absolutePath = `${absolutePath}\\index.js`;
+        }
+      }
+    } else {
+      absolutePath = getAbsolutePath(document, word);
+    }
+  });
+
   if (fs.existsSync(absolutePath)) {
     try {
       return new vscode.Location(vscode.Uri.file(absolutePath), new vscode.Position(0, 0));

@@ -41,6 +41,13 @@
           "type": "string",
           "default": "ajax",
           "description": "请求方法名"
+        },
+        "linkToDefine.alias": {
+          "type": "object",
+          "default": {
+            "@src": "{root}/src"
+          },
+          "description": "alias"
         }
       }
     }
