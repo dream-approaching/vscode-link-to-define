@@ -26,7 +26,7 @@ async function provideDefinition(document, position) {
   // 只处理js文件
   if (/\.(js|jsx|ts|tsx)$/.test(fileName)) {
     const json = document.getText();
-    const requestPrefix = vscode.workspace.getConfiguration().get('linkToDefine.alias');
+    const requestPrefix = vscode.workspace.getConfiguration().get('linkToDefine.requestPrefix');
     // ajax('')
     const reg = new RegExp(
       `${requestPrefix}\\(\\s*.*('|")${word.replace(/\//g, '\\/')}('|"),?`,
