@@ -9,6 +9,32 @@ function getStuff(paths, config) {
   return readFile(paths, config);
 }
 
+async function getLineNum(destPath, word) {
+  const res = await getStuff(destPath, { encoding: 'utf-8' });
+  const lines = res.toString().split('\n');
+  const lineNum = lines.findIndex((item) => item.indexOf(word) > -1);
+  return lineNum;
+}
+
+async function getPathFromList(destPath, word) {
+  // 文件列表
+  const apiFileList = fs.readdirSync(destPath).map((item) => `${destPath}/${item}`);
+  return new Promise((resolve) => {
+    apiFileList.forEach(async (apiFileItem) => {
+      if (fs.existsSync(apiFileItem)) {
+        try {
+          const lineNum = await getLineNum(apiFileItem, word);
+          console.log('%c zjs lineNum:', 'color: #0e93e0;background: #aaefe5;', lineNum);
+          if (lineNum === -1) return false;
+          resolve([apiFileItem, lineNum]);
+        } catch (error) {
+          console.log('%c zjs error:', 'color: #0e93e0;background: #aaefe5;', error);
+        }
+      }
+    });
+  });
+}
+
 /**
  * 查找文件定义的provider，匹配到了就return一个location，否则不做处理
  * 最终效果是，当按住Ctrl键时，如果return了一个location，字符串就会变成一个可以点击的链接，否则无任何效果
@@ -39,26 +65,22 @@ async function provideDefinition(document, position) {
     );
     if (reg.test(json) || reg2.test(json)) {
       // webapp项目
-      const destPath1 = `${projectPath}/src/config/api.js`;
+      const folderPath = `${projectPath}/src/api`;
       // 小程序项目
       const destPath2 = `${projectPath}/config/api-config.js`;
-      let destPath = '';
-      if (fs.existsSync(destPath1)) {
-        destPath = destPath1;
-      } else if (fs.existsSync(destPath2)) {
-        destPath = destPath2;
-      }
-      if (fs.existsSync(destPath)) {
-        let lineNum = 0;
-        try {
-          const res = await getStuff(destPath, { encoding: 'utf-8' });
-          const lines = res.toString().split('\n');
-          lineNum = lines.findIndex((item) => item.indexOf(word) > -1);
-          return new vscode.Location(vscode.Uri.file(destPath), new vscode.Position(lineNum, 0));
-        } catch (error) {
-          console.log('%c zjs error:', 'color: #0e93e0;background: #aaefe5;', error);
-          // vscode.window.showErrorMessage(JSON.stringify(error));
+      if (fs.existsSync(destPath2)) {
+        if (fs.existsSync(destPath2)) {
+          try {
+            const lineNum = await getLineNum(destPath2, word);
+            if (lineNum === -1) return false;
+            return new vscode.Location(vscode.Uri.file(destPath2), new vscode.Position(lineNum, 0));
+          } catch (error) {
+            console.log('%c zjs error:', 'color: #0e93e0;background: #aaefe5;', error);
+          }
         }
+      } else if (fs.existsSync(folderPath)) {
+        const [descPath, lineNum] = await getPathFromList(folderPath, word);
+        return new vscode.Location(vscode.Uri.file(descPath), new vscode.Position(lineNum, 0));
       }
     }
   }
