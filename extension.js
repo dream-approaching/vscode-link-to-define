@@ -1,109 +1,23 @@
-const vscode = require('vscode');
-const path = require('path');
-const fs = require('fs');
-const util = require('util');
+const minappCompDefinition = require('./extends/minapp-definition/extension');
+const apiDefinition = require('./extends/api-definition/extension');
+const pathDefinition = require('./extends/path-definition/extension');
 
-const readFile = util.promisify(fs.readFile);
+function activate(context) {
+  console.log('link-to-define is now active!');
 
-function getStuff(paths, config) {
-  return readFile(paths, config);
+  // 小程序组件跳转
+  minappCompDefinition.activate(context);
+
+  // ajax api跳转
+  apiDefinition.activate(context);
+
+  // path跳转
+  pathDefinition.activate(context);
 }
 
-function getProjectPath(document) {
-  if (!document) {
-    document = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document : null;
-  }
-  if (!document) {
-    vscode.window.showErrorMessage('当前激活的编辑器不是文件或者没有文件被打开！');
-    return '';
-  }
-  const currentFile = (document.uri ? document.uri : document).fsPath;
-  let projectPath = null;
+function deactivate() {}
 
-  const workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(path.join(currentFile)));
-  const workspaceFolderPath = workspaceFolder.uri.fsPath;
-  console.log('%c zjs workspaceFolderPath:', 'color: #0e93e0;background: #aaefe5;', workspaceFolderPath);
-
-  // 获取出来的路径是反斜杠的 这里转换一下
-  const regex = /\\/gi;
-  projectPath = workspaceFolderPath;
-  if (!projectPath) {
-    console.log('获取工程根路径异常！');
-    return '';
-  }
-  return projectPath;
-}
-/**
- * 查找文件定义的provider，匹配到了就return一个location，否则不做处理
- * 最终效果是，当按住Ctrl键时，如果return了一个location，字符串就会变成一个可以点击的链接，否则无任何效果
- * @param {*} document
- * @param {*} position
- * @param {*} token
- */
-async function provideDefinition(document, position) {
-  console.log('进入 provideDefinition');
-  const { fileName } = document;
-  const word = document.getText(document.getWordRangeAtPosition(position));
-  const line = document.lineAt(position);
-  const projectPath = getProjectPath(document);
-  console.log('%c zjs projectPath:', 'color: #0e93e0;background: #aaefe5;', projectPath);
-
-  console.log(`fileName: ${fileName}`); // 当前文件完整路径
-  console.log(`当前光标所在单词: ${word}`); // 当前光标所在单词
-  console.log(`当前光标所在行: ${line.text}`); // 当前光标所在行
-  // 只处理js文件
-  if (/\.(js|jsx|ts|tsx)$/.test(fileName)) {
-    const json = document.getText();
-    // ajax('')
-    const reg = new RegExp(`ajax\\(\\s*('|")${word.replace(/\//g, '\\/')}('|"),?`, 'gm');
-    // yield call(ajax, 'deptRankList',
-    const reg2 = new RegExp(`yield call\\(ajax\\, ?('|")${word.replace(/\//g, '\\/')}('|"), ?`, 'gm');
-    if (reg.test(json) || reg2.test(json)) {
-      // webapp项目
-      const destPath1 = `${projectPath}/src/config/api.js`;
-      // 小程序项目
-      const destPath2 = `${projectPath}/config/api-config.js`;
-      let destPath = '';
-      if (fs.existsSync(destPath1)) {
-        destPath = destPath1;
-      } else if (fs.existsSync(destPath2)) {
-        destPath = destPath2;
-      }
-      if (fs.existsSync(destPath)) {
-        let lineNum = 0;
-        try {
-          const res = await getStuff(destPath, { encoding: 'utf-8' });
-          const lines = res.toString().split('\n');
-          lineNum = lines.findIndex(item => item.indexOf(word) > -1);
-          return new vscode.Location(vscode.Uri.file(destPath), new vscode.Position(lineNum, 0));
-        } catch (error) {
-          vscode.window.showErrorMessage('%c zjs error:', 'color: #0e93e0;background: #aaefe5;', JSON.stringify(error));
-        }
-      }
-    }
-  }
-}
-
-/**
- * 插件被激活时触发，所有代码总入口
- * @param {*} context 插件上下文
- */
-exports.activate = function(context) {
-  console.log('%c zjs context:', 'color: #0e93e0;background: #aaefe5;', 123);
-  // 注册如何实现跳转到定义，第一个参数表示仅对json文件生效
-  context.subscriptions.push(
-    vscode.languages.registerDefinitionProvider(
-      { pattern: '**/*.{ts,js,jsx,tsx}' },
-      {
-        provideDefinition
-      }
-    )
-  );
-};
-
-/**
- * 插件被释放时触发
- */
-exports.deactivate = function() {
-  console.log('您的扩展“vscode-plugin-demo”已被释放！');
+module.exports = {
+  activate,
+  deactivate,
 };

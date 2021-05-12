@@ -2,7 +2,24 @@
   "name": "link-to-define",
   "displayName": "link to define",
   "description": "link to define",
-  "version": "0.1.5",
+  "version": "0.1.15",
+  "keywords": [
+    "link",
+    "link-",
+    "link-to",
+    "link-to-",
+    "link-to-define"
+  ],
+  "author": {
+    "email": "longzizheng@gmail.com",
+    "name": "longzi",
+    "url": "https://github.com/dream-approaching"
+  },
+  "bugs": {
+    "email": "longzizheng@gmail.com",
+    "url": "https://github.com/dream-approaching/vscode-link-to-define/issues"
+  },
+  "repository": "https://github.com/dream-approaching/vscode-link-to-define",
   "publisher": "longzi",
   "engines": {
     "vscode": "^1.5.0"
@@ -15,7 +32,26 @@
   ],
   "icon": "image/icon.png",
   "main": "./extension",
-  "contributes": {},
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Link-To-Define",
+      "properties": {
+        "linkToDefine.requestPrefix": {
+          "type": "string",
+          "default": "ajax",
+          "description": "请求方法名"
+        },
+        "linkToDefine.alias": {
+          "type": "object",
+          "default": {
+            "@src": "{root}/src"
+          },
+          "description": "alias"
+        }
+      }
+    }
+  },
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "node ./node_modules/vscode/bin/test"
@@ -23,8 +59,23 @@
   "devDependencies": {
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
-    "eslint": "^3.6.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.12.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-compat": "^2.6.3",
+    "eslint-plugin-markdown": "^1.0.0",
     "mocha": "^2.3.3",
+    "prettier": "^2.1.2",
     "typescript": "^2.0.3",
     "vscode": "^1.0.0"
   },
